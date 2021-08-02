@@ -1,0 +1,105 @@
+body {
+}
+
+ul.list-group {
+  li {
+
+    label {
+      cursor: pointer;
+      font-family: 'M PLUS 1p', sans-serif;
+
+
+      span.done {
+        background: linear-gradient(transparent .7em, red 0, red calc(.7em + 3px), transparent 0);
+      }
+    }
+  }
+}
+
+nav.navbar {
+  background-color: #eee;
+}
+
+table.task-calendar {
+  width: 100%;
+
+  thead {
+    th {
+      text-align: center;
+      padding: .6em 0;
+      &.week-sat {
+        color: blue;
+      }
+      &.week-sun {
+        color: red;
+      }
+    }
+  }
+
+  tbody {
+    td {
+      text-align: center;
+      padding: .3em .2em;
+      position: relative;
+
+      span {
+
+        &.has-task {
+
+          a {
+            color: white;
+            background-color: #0d6efd;
+          }
+        }
+
+        a {
+          text-decoration: none;
+          height: 40px;
+          width: 40px;
+          font-size: 13px;
+          border-radius: 50%;
+          display: inline-block;
+          background-color: #f1f1f1;
+          line-height: 40px;
+          font-weight: bold;
+          color: black;
+
+          &:hover {
+            background-color: black;
+            color: white;
+          }
+        }
+      }
+
+      &.not_current_month span a {
+        color: #ccc;
+      }
+
+      &.today span a {
+        color: red;
+        background-color: #ffe9e9;
+      }
+
+      &.the_day span a {
+        border: 2px solid #999;
+        line-height: 36px;
+      }
+
+      span.complete {
+        position: absolute;
+        font-size: 10px;
+        display: inline-block;
+        line-height: 1;
+        padding: .4em;
+        border-radius: 100%;
+        background-color: red;
+        color: white;
+        top: 0;
+      }
+
+
+    }
+  }
+}
+
+
