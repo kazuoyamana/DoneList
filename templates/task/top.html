@@ -5,137 +5,139 @@
 
 {% block content %}
 
-  <div class="row justify-content-xl-between justify-content-center py-4">
+  <div class="container">
 
-    <div class="col-lg-8 col-md-10 col-xl-7">
+    <div class="row justify-content-xl-between justify-content-center py-4">
 
-      <div class="row justify-content-between my-5">
-        <div class="prev col-3"><a href="{% url 'task:day' yesterday.year yesterday.month yesterday.day %}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-               class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-                  d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"></path>
-          </svg>
-          前日</a>
+      <div class="col-lg-8 col-md-10 col-xl-7">
+
+        <div class="row justify-content-between my-5">
+          <div class="prev col-3"><a href="{% url 'task:day' yesterday.year yesterday.month yesterday.day %}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                    d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"></path>
+            </svg>
+            前日</a>
+          </div>
+          <h5 class="col-6 text-center">{{ the_day|date }}</h5>
+          <div class="next col-3 text-end"><a href="{% url 'task:day' tomorrow.year tomorrow.month tomorrow.day %}">翌日
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                    d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+            </svg>
+          </a></div>
         </div>
-        <h5 class="col-6 text-center">{{ the_day|date }}</h5>
-        <div class="next col-3 text-end"><a href="{% url 'task:day' tomorrow.year tomorrow.month tomorrow.day %}">翌日
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-               class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-                  d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-          </svg>
-        </a></div>
-      </div>
 
-      <form method="post" class="my-5">
-        {% csrf_token %}
-        <div class="input-group mb-3 p-0">
-          {{ form.title|attr:'class:form-control form-control-lg'|attr:'placeholder:タスクを入力' }}
-          <input class="btn btn-primary" type="submit" value="追加">
-        </div>
-      </form>
+        <form method="post" class="my-5">
+          {% csrf_token %}
+          <div class="input-group mb-3 p-0">
+            {{ form.title|attr:'class:form-control form-control-lg'|attr:'placeholder:タスクを入力' }}
+            <input class="btn btn-primary" type="submit" value="追加">
+          </div>
+        </form>
 
-      <ul class="list-group list-group-flush">
-        {% for task in tasks_of_the_day %}
-          <li class="list-group-item d-flex justify-content-between task-{{ task.id }}">
-            <label for="task-check-{{ task.id }}">
-              {% if task.done_at != None %}
-                <input type="checkbox" id="task-check-{{ task.id }}" checked>
-                <span class="done">{{ task.title }}</span>
+        <ul class="list-group list-group-flush">
+          {% for task in tasks_of_the_day %}
+            <li class="list-group-item d-flex justify-content-between task-{{ task.id }}">
+              <label for="task-check-{{ task.id }}">
+                {% if task.done_at != None %}
+                  <input type="checkbox" id="task-check-{{ task.id }}" checked>
+                  <span class="done">{{ task.title }}</span>
+                {% else %}
+                  <input type="checkbox" id="task-check-{{ task.id }}">
+                  <span>{{ task.title }}</span>
+                {% endif %}
+              </label>
+              <a href="{% url 'task:delete' task_id=task.id %}" data-task-id="{{ task.id }}" class="delete">
+                <span class="badge bg-light">❌</span>
+              </a>
+            </li>
+          {% empty %}
+            <p class="text-center">
+              {% if the_day > today %}
+                まだ何も予定がありませんね😌
+              {% elif the_day == today %}
+                まだ今日はなにもしてませんね😌
               {% else %}
-                <input type="checkbox" id="task-check-{{ task.id }}">
-                <span>{{ task.title }}</span>
+                この日はなにもしませんでした😅
               {% endif %}
-            </label>
-            <a href="{% url 'task:delete' task_id=task.id %}" data-task-id="{{ task.id }}" class="delete">
-              <span class="badge bg-light">❌</span>
-            </a>
-          </li>
-        {% empty %}
-          <p class="text-center">
-            {% if the_day > today %}
-              まだ何も予定がありませんね😌
-            {% elif the_day == today %}
-              まだ今日はなにもしてませんね😌
-            {% else %}
-              この日はなにもしませんでした😅
-            {% endif %}
-          </p>
-        {% endfor %}
-      </ul>
-    </div>
-
-
-    <div class="col-lg-8 col-md-10 col-xl-4">
-
-      <div class="row justify-content-between my-5">
-        <div class="prev col-3"><a href="{% url 'task:day' month_previous.year month_previous.month the_day.day %}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-               class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-                  d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"></path>
-          </svg>
-          前月</a>
-        </div>
-        <h5 class="col-6 text-center">{{ month_current | date:"Y年m月" }}</h5>
-        <div class="next col-3 text-end"><a href="{% url 'task:day' month_next.year month_next.month the_day.day %}">翌月
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-               class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
-            <path fill-rule="evenodd"
-                  d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
-          </svg>
-        </a></div>
+            </p>
+          {% endfor %}
+        </ul>
       </div>
 
 
-      <table class="task-calendar">
-        <thead>
-        <tr>
-          {% for w in week_names %}
-            {% if w == '土' %}
-              <th class="week-sat">{{ w }}</th>
-            {% elif w == '日' %}
-              <th class="week-sun">{{ w }}</th>
-            {% else %}
-              <th>{{ w }}</th>
-            {% endif %}
-          {% endfor %}
-        </tr>
-        </thead>
-        <tbody>
-        {% for week_day_tasks in month_day_tasks %}
+      <div class="col-lg-8 col-md-10 col-xl-4">
+
+        <div class="row justify-content-between my-5">
+          <div class="prev col-3"><a href="{% url 'task:day' month_previous.year month_previous.month the_day.day %}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                    d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"></path>
+            </svg>
+            前月</a>
+          </div>
+          <h5 class="col-6 text-center">{{ month_current | date:"Y年m月" }}</h5>
+          <div class="next col-3 text-end"><a href="{% url 'task:day' month_next.year month_next.month the_day.day %}">翌月
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                 class="bi bi-arrow-right-circle" viewBox="0 0 16 16">
+              <path fill-rule="evenodd"
+                    d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM4.5 7.5a.5.5 0 0 0 0 1h5.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H4.5z"/>
+            </svg>
+          </a></div>
+        </div>
+
+
+        <table class="task-calendar">
+          <thead>
           <tr>
-            {% for day, tasks in week_day_tasks.items %}
-
-              {% if month_current.month != day.month %}
-                <td class="not_current_month">
-                  {% elif day == today %}
-                <td class="today">
-                  {% elif day == the_day %}
-                <td class="the_day">
-                  {% else %}
-                <td>
+            {% for w in week_names %}
+              {% if w == '土' %}
+                <th class="week-sat">{{ w }}</th>
+              {% elif w == '日' %}
+                <th class="week-sun">{{ w }}</th>
+              {% else %}
+                <th>{{ w }}</th>
               {% endif %}
-
-
-            {% if tasks %}<span class="has-task">
-              {% if False not in tasks %}<span class="complete">完</span>{% endif %}
-            {% else %}<span>
-            {% endif %}
-            <a href="{% url 'task:day' day.year day.month day.day %}">{{ day.day }}</a>
-            </span>
-
-            </td>
             {% endfor %}
           </tr>
-        {% endfor %}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+          {% for week_day_tasks in month_day_tasks %}
+            <tr>
+              {% for day, tasks in week_day_tasks.items %}
+
+                {% if month_current.month != day.month %}
+                  <td class="not_current_month">
+                    {% elif day == today %}
+                  <td class="today">
+                    {% elif day == the_day %}
+                  <td class="the_day">
+                    {% else %}
+                  <td>
+                {% endif %}
+
+
+              {% if tasks %}<span class="has-task">
+                {% if False not in tasks %}<span class="complete">完</span>{% endif %}
+              {% else %}<span>
+              {% endif %}
+              <a href="{% url 'task:day' day.year day.month day.day %}">{{ day.day }}</a>
+              </span>
+
+              </td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
     </div>
-
   </div>
-
 
   <script>
 

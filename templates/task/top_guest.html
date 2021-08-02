@@ -1,21 +1,32 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}今日やったことを記録しよう！{% endblock %}
 
 {% block content %}
 
-   <section class="py-5 text-center container">
-    <div class="row py-lg-5">
+  <div class="text-center">
+
+  <img src="{% static 'img/top_anime.gif' %}" alt="" class="mw-100">
+  </div>
+
+  <hr>
+
+<div class="container">
+   <section>
+    <div class="row py-5">
       <div class="col-lg-8 col-md-10 mx-auto">
-        <h1 class="fw-light">今日やったことを記録しよう！</h1>
-        <p class="lead text-muted">「今日何やったっけ？」もしそんな感じで一日が過ぎていくことに抵抗を感じるなら、
-          あなたが「今日やり遂げたこと」をどんな小さなことでもいいので記録してみましょう。</p>
-        <p>
-          <a href="{% url 'signup' %}" class="btn btn-primary my-2">ユーザー登録</a>
-          <a href="{% url 'login' %}" class="btn btn-secondary my-2">ログイン</a>
+        <h1 class="fw-light text-center">今日やったことを記録しよう！</h1>
+        <p class="lead text-muted py-4">DoneListは今日やったことを記録するためのカレンダー付きTodoリストです。
+          カレンダーにはTodoのある日、完了した日などが表示されるので、タスクを継続的にこなしているか一目瞭然です。</p>
+        <p class="text-center">
+          <a href="{% url 'signup' %}" class="btn btn-primary btn-lg">ユーザー登録してみる</a>
+          <a href="{% url 'login' %}" class="btn btn-secondary m-1">ログイン</a>
         </p>
       </div>
     </div>
   </section>
+</div>
+
 
 {% endblock %}
