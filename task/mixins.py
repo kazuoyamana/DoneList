@@ -86,7 +86,8 @@ class MonthWithTaskMixin(MonthCalendarMixin):
         # 例えば、Task.objects.filter(created_at__range=(1日, 31日), created_by=request.user) になる
         queryset = self.model.objects.filter(**lookup)
 
-        # {1日のdatetime: 1日のタスク全て, 2日のdatetime: 2日の全て...}のような辞書を作る
+        # {1日のdatetime: [True, False, False], 2日のdatetime: [False, True]...}のような辞書を作る
+        # True / False はタスク完了したかどうかを表す
         day_tasks = {day: [] for week in days for day in week}
 
         for task in queryset:
