@@ -1,9 +1,9 @@
 ul.list-group li label {
   cursor: pointer;
-  font-family: "M PLUS 1p", sans-serif;
+  font-size: 17px;
 }
 ul.list-group li label span.done {
-  background: linear-gradient(transparent 0.7em, red 0, red calc(.7em + 3px), transparent 0);
+  background: linear-gradient(transparent 0.5em, red 0, red calc(.5em + 3px), transparent 0);
 }
 
 nav.navbar {
@@ -59,16 +59,17 @@ table.task-calendar tbody td.the_day span a {
   border: 2px solid #999;
   line-height: 36px;
 }
-table.task-calendar tbody td span.complete {
+table.task-calendar tbody td i.bi-check-circle-fill {
   position: absolute;
-  font-size: 10px;
-  display: inline-block;
-  line-height: 1;
-  padding: 0.4em;
-  border-radius: 100%;
-  background-color: red;
-  color: white;
   top: 0;
+  color: red;
+  line-height: 1;
+  background-color: white;
+  border-radius: 100%;
+}
+
+.prev a, .next a {
+  text-decoration: none;
 }
 
 /*# sourceMappingURL=main.css.map */

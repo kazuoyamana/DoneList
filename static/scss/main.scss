@@ -6,11 +6,10 @@ ul.list-group {
 
     label {
       cursor: pointer;
-      font-family: 'M PLUS 1p', sans-serif;
-
+      font-size: 17px;
 
       span.done {
-        background: linear-gradient(transparent .7em, red 0, red calc(.7em + 3px), transparent 0);
+        background: linear-gradient(transparent .5em, red 0, red calc(.5em + 3px), transparent 0);
       }
     }
   }
@@ -85,21 +84,24 @@ table.task-calendar {
         line-height: 36px;
       }
 
-      span.complete {
-        position: absolute;
-        font-size: 10px;
-        display: inline-block;
-        line-height: 1;
-        padding: .4em;
-        border-radius: 100%;
-        background-color: red;
-        color: white;
-        top: 0;
-      }
 
+      // 完了マーク
+      i.bi-check-circle-fill {
+        position: absolute;
+        top: 0;
+        color: red;
+        line-height: 1;
+        background-color: white;
+        border-radius: 100%;
+      }
 
     }
   }
 }
 
+.prev, .next {
+  a {
+    text-decoration: none;
+  }
+}
 
