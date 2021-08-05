@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'task.apps.TaskConfig',
     'accounts.apps.AccountsConfig',
+
     'widget_tweaks',
     'django_bootstrap5',
 ]

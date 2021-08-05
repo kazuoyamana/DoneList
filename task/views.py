@@ -21,9 +21,10 @@ def task_delete(request, task_id):
         task.delete()
         return redirect('task:top')
     else:
-        return HttpResponse('<h1>他人のタスクは消せないよ😅</h1>')
+        return HttpResponse("<h1>You can't delete task that belongs to someone else.😅</h1>")
 
 
+@csrf_protect
 def task_done(request, task_id, status):
     task = get_object_or_404(Task, pk=task_id)
 
