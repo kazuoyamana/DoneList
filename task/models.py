@@ -17,6 +17,14 @@ class Task(models.Model):
         return self.title
 
 
-# created_at は DateTimeField の auto_now_add=True にしてたけど、
-# これだと任意の値で上書きできないので timezone.now に変更
+class Comment(models.Model):
+    body = models.TextField('コメント')
+    created_at = models.DateField('コメント作成日', default=timezone.now)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    class Meta:
+        db_table = 'comment'
+
+    def __str__(self):
+        return self.body
 

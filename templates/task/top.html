@@ -1,13 +1,24 @@
 {% extends 'base.html' %}
 {% load widget_tweaks %}
+{% load django_bootstrap5 %}
 
-{% block title %}今日やったことを記録しよう！{% endblock %}
+
+{% block title %}{{ the_day|date }}{% endblock %}
 
 {% block content %}
 
   <div class="container">
 
     <div class="row justify-content-xl-between justify-content-center py-4">
+
+      {% if messages %}
+        <ul class="messages">
+          {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+      {% bootstrap_messages %}
 
       <div class="col-lg-8 col-md-10 col-xl-7">
 
@@ -21,7 +32,7 @@
           </a></div>
         </div>
 
-        <form method="post" class="my-5">
+        <form method="post" class="form">
           {% csrf_token %}
           <div class="input-group mb-3 p-0">
             {{ form.title|attr:'class:form-control form-control-lg'|attr:'placeholder:タスクを入力' }}
@@ -45,18 +56,58 @@
                 <i class="bi bi-x-circle-fill"> </i>
               </a>
             </li>
-          {% empty %}
+            {% empty %}
             <p class="text-center">
               {% if the_day > today %}
-                まだ何も予定がありませんね😌
+                この日はまだ予定がありません 😌
               {% elif the_day == today %}
-                まだ今日はなにもしてませんね😌
+                まだ今日はなにもしてませんね 😌
               {% else %}
-                この日はなにもしませんでした😅
+                この日はなにもしてません 😅
               {% endif %}
             </p>
           {% endfor %}
         </ul>
+
+
+        <div class="card border-info mb-3 comment">
+          {% if comment %}
+            <form method="post">
+              {% csrf_token %}
+              <div class="card-header">
+                <div class="d-flex justify-content-between">
+                  <div class="col">
+                    この日の感想など
+                  </div>
+                    <a class="" id="edit-comment"><span class="badge rounded-pill bg-danger">編集する</span></a>
+                </div>
+              </div>
+
+              <div class="card-body comment-normal">
+                <p class="card-text">{{ comment|linebreaksbr }}</p>
+              </div>
+
+              <div class="card-body comment-edit" style="display: none">
+                {{ cform.body|attr:'class:form-control comment_form'|attr:'placeholder:コメント' }}
+                <input type="submit" value="コメントを変更" class="btn btn-sm btn-primary">
+                <a class="btn btn-secondary btn-sm" id="cancel-comment">キャンセル</a>
+                <a class="btn btn-danger btn-sm"
+                   href="{% url 'task:delete_co' the_day.year the_day.month the_day.day %}">削除</a>
+              </div>
+
+            </form>
+          {% else %}
+            <div class="card-header"><i class="bi bi-chat"></i> この日の感想などをコメントとして残すことが出来ます</div>
+            <form method="post" class="m-3">
+              {% csrf_token %}
+              {{ cform.body|attr:'class:form-control comment_form'|attr:'placeholder:コメント' }}
+              <input type="submit" value="コメントを追加" class="btn btn-sm btn-primary">
+            </form>
+          {% endif %}
+
+        </div>
+
+
       </div>
 
 
@@ -103,10 +154,13 @@
                 {% endif %}
 
 
-              {% if tasks %}<span class="has-task">
-                {% if False not in tasks %}<i class="bi bi-check-circle-fill"></i>{% endif %}
+              {#  タスクの存在確認と完了確認分岐  #}
+              {% if 'Yet' in tasks or 'Done' in tasks %}<span class="has-task">
+                {% if 'Yet' not in tasks %}<i class="bi bi-check-circle-fill"></i>{% endif %}
               {% else %}<span>
               {% endif %}
+              {#  コメントの存在確認  #}
+              {% if 'Comment' in tasks %}<i class="bi bi-chat"></i>{% endif %}
               <a href="{% url 'task:day' day.year day.month day.day %}">{{ day.day }}</a>
               </span>
 
@@ -199,6 +253,32 @@
         })
       })
     }
+
+    // --------------------------------------------
+    // コメント編集表示切り替え
+    // --------------------------------------------
+    const editBtn = document.getElementById('edit-comment')
+    const cancelBtn = document.getElementById('cancel-comment')
+    let commentNormal = document.querySelector('.comment-normal')
+    let commentEdit = document.querySelector('.comment-edit')
+
+    let changeDisplay = (el) => {
+      if (el.style.display === 'none') {
+        el.style.display = 'block'
+      } else {
+        el.style.display = 'none'
+      }
+    }
+
+    commentBtns = [editBtn, cancelBtn]
+
+    for (let i = 0; i < commentBtns.length; i++) {
+      commentBtns[i].addEventListener('click', function () {
+        changeDisplay(commentNormal)
+        changeDisplay(commentEdit)
+      })
+    }
+
 
   </script>
 

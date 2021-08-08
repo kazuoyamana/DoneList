@@ -39,9 +39,13 @@ table.task-calendar {
     td {
       text-align: center;
       padding: .3em .2em;
-      position: relative;
+
 
       span {
+        display: inline-block;
+        position: relative;
+        height: 40px;
+        width: 40px;
 
         &.has-task {
 
@@ -89,19 +93,54 @@ table.task-calendar {
       i.bi-check-circle-fill {
         position: absolute;
         top: 0;
+        left: 0;
         color: red;
         line-height: 1;
         background-color: white;
         border-radius: 100%;
+      }
+      // コメントマーク
+      i.bi-chat {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        line-height: 1;
+        background-color: white;
+        border-radius: 100%;
+        font-size: 13px;
       }
 
     }
   }
 }
 
+// 前日・翌日・前月・翌月表示部分
 .prev, .next {
   a {
     text-decoration: none;
   }
 }
 
+
+.comment {
+  margin: 3em 0;
+  h3 {
+    font-size: 16px;
+    padding: 10px;
+    background-color: #eee;
+  }
+
+  span.badge {
+    cursor: pointer;
+  }
+
+  textarea {
+    height: 100px !important;
+    margin-bottom: 15px;
+  }
+
+  .comment-edit {
+  }
+  .comment-normal {
+  }
+}

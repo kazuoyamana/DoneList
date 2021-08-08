@@ -3,6 +3,8 @@ import datetime
 import itertools
 from collections import deque
 
+from .models import Comment
+
 
 class BaseCalendarMixin:
     """カレンダー関連Mixinの、基底クラス"""
@@ -85,6 +87,7 @@ class MonthWithTaskMixin(MonthCalendarMixin):
         }
         # 例えば、Task.objects.filter(created_at__range=(1日, 31日), created_by=request.user) になる
         queryset = self.model.objects.filter(**lookup)
+        comment_qs = Comment.objects.filter(**lookup)
 
         # {1日のdatetime: [True, False, False], 2日のdatetime: [False, True]...}のような辞書を作る
         # True / False はタスク完了したかどうかを表す
@@ -94,12 +97,18 @@ class MonthWithTaskMixin(MonthCalendarMixin):
             task_date = getattr(task, self.date_field)
 
             if task.done_at:
-                task_status = True
+                task_status = 'Done'
             else:
-                task_status = False
+                task_status = 'Yet'
 
             day_tasks[task_date].append(task_status)
 
+        for comment in comment_qs:
+            comment_date = comment.created_at
+            day_tasks[comment_date].append('Comment')
+
+
+        print(day_tasks)
         # day_tasks辞書を、週毎に分割する。[{1日: 1日のタスク...}, {8日: 8日のタスク...}, ...]
         # 7個ずつ取り出して分割しています。
         size = len(day_tasks)
