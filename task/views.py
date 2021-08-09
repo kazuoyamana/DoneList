@@ -55,15 +55,15 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
 
         the_day = datetime.date(kwargs['year'], kwargs['month'], kwargs['day'])
 
-        # コメントを取得、なければNoneを入れておく
-        try:
-            comment = Comment.objects.filter(created_by=request.user, created_at=the_day)[0]
-        except IndexError:
-            comment = None
-
         if request.user.is_authenticated:
             tasks = Task.objects.filter(created_by=request.user, created_at=the_day)
             form = AddTaskForm(request.POST or None)
+
+            # コメントを取得、なければNoneを入れておく
+            try:
+                comment = Comment.objects.filter(created_by=request.user, created_at=the_day)[0]
+            except IndexError:
+                comment = None
 
             # コメントが存在すれば編集モードに
             if comment:

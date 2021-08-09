@@ -22,7 +22,7 @@
 
       <div class="col-lg-8 col-md-10 col-xl-7">
 
-        <div class="row justify-content-between my-5">
+        <div class="row justify-content-between my-3">
           <div class="prev col-3"><a href="{% url 'task:day' yesterday.year yesterday.month yesterday.day %}">
             <i class="bi bi-arrow-left-short"></i> 前日</a>
           </div>
@@ -40,7 +40,7 @@
           </div>
         </form>
 
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush task-list">
           {% for task in tasks_of_the_day %}
             <li class="list-group-item d-flex justify-content-between task-{{ task.id }}">
               <label for="task-check-{{ task.id }}">
@@ -53,7 +53,7 @@
                 {% endif %}
               </label>
               <a href="{% url 'task:delete' task_id=task.id %}" data-task-id="{{ task.id }}" class="delete">
-                <i class="bi bi-x-circle-fill"> </i>
+                <i class="bi bi-x-circle-fill" style="color: red"> </i>
               </a>
             </li>
           {% empty %}
@@ -76,7 +76,7 @@
               {% csrf_token %}
               <div class="card-header">
                 <div class="d-flex justify-content-between">
-                  <div class="col"><i class="bi bi-chat"></i> この日の感想など</div>
+                  <div class="col"><i class="bi bi-chat"></i> この日のメモ</div>
                   <a class="" id="edit-comment"><span class="badge rounded-pill bg-secondary">編集する</span></a>
                 </div>
               </div>
@@ -86,8 +86,8 @@
               </div>
 
               <div class="card-body comment-edit" style="display: none">
-                {{ comment_form.body|attr:'class:form-control comment_form'|attr:'placeholder:コメント' }}
-                <input type="submit" value="コメントを変更" class="btn btn-sm btn-primary">
+                {{ comment_form.body|attr:'class:form-control comment_form' }}
+                <input type="submit" value="メモを変更" class="btn btn-sm btn-primary">
                 <a class="btn btn-secondary btn-sm" id="cancel-comment">キャンセル</a>
                 <a class="btn btn-danger btn-sm"
                    href="{% url 'task:delete_co' the_day.year the_day.month the_day.day %}">削除</a>
@@ -95,11 +95,11 @@
 
             </form>
           {% else %}
-            <div class="card-header"><i class="bi bi-chat"></i> この日の感想などをコメントとして残すことが出来ます</div>
+            <div class="card-header"><i class="bi bi-chat"></i> この日のメモを残すことが出来ます</div>
             <form method="post" class="m-3">
               {% csrf_token %}
-              {{ comment_form.body|attr:'class:form-control comment_form'|attr:'placeholder:コメント' }}
-              <input type="submit" value="コメントを追加" class="btn btn-sm btn-primary">
+              {{ comment_form.body|attr:'class:form-control comment_form'|attr:'placeholder:例：今日は思ったより読書できた 😃' }}
+              <input type="submit" value="メモを記録する" class="btn btn-sm btn-primary">
             </form>
           {% endif %}
 
@@ -111,7 +111,7 @@
 
       <div class="col-lg-8 col-md-10 col-xl-4">
 
-        <div class="row justify-content-between my-5">
+        <div class="row justify-content-between my-3">
           <div class="prev col-3"><a href="{% url 'task:day' month_previous.year month_previous.month the_day.day %}">
             <i class="bi bi-arrow-left-short"></i> 前月</a>
           </div>

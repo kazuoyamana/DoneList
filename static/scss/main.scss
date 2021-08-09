@@ -1,7 +1,29 @@
 body {
 }
 
-ul.list-group {
+.top-image {
+  background: url("../img/top_image@2x.png") no-repeat 90% 50% / 30% auto;
+  padding: 15% 40% 15% 12%;
+
+  @media screen and (max-width: 768px) {
+    background: url("../img/top_image@2x.png") no-repeat 50% 5% / 70% auto;
+    padding: 70% 5% 10%;
+    .buttons {
+      text-align: center;
+    }
+  }
+}
+
+ul.task-list {
+  background-color: #def5f4;
+  border-radius: 8px;
+  padding: 14px;
+  margin: 2em auto;
+
+  p {
+    margin: 1.2em auto;
+  }
+
   li {
 
     label {
@@ -15,6 +37,7 @@ ul.list-group {
   }
 }
 
+
 nav.navbar {
   background-color: #eee;
 }
@@ -26,9 +49,11 @@ table.task-calendar {
     th {
       text-align: center;
       padding: .6em 0;
+
       &.week-sat {
         color: blue;
       }
+
       &.week-sun {
         color: red;
       }
@@ -48,7 +73,6 @@ table.task-calendar {
         width: 40px;
 
         &.has-task {
-
           a {
             color: white;
             background-color: #0d6efd;
@@ -98,6 +122,7 @@ table.task-calendar {
         background-color: white;
         border-radius: 100%;
       }
+
       // コメントマーク
       i.bi-chat {
         position: absolute;
@@ -121,7 +146,7 @@ table.task-calendar {
 
 
 .comment {
-  margin: 3em 0;
+
   h3 {
     font-size: 16px;
     padding: 10px;
@@ -139,6 +164,8 @@ table.task-calendar {
 
   .comment-edit {
   }
+
   .comment-normal {
   }
 }
+

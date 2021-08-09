@@ -89,8 +89,9 @@ class MonthWithTaskMixin(MonthCalendarMixin):
         queryset = self.model.objects.filter(**lookup)
         comment_qs = Comment.objects.filter(**lookup)
 
-        # {1日のdatetime: [True, False, False], 2日のdatetime: [False, True]...}のような辞書を作る
-        # True / False はタスク完了したかどうかを表す
+        # {1日のdatetime: ['Done', 'Yet', 'Yet', 'Comment'], 2日のdatetime: ['Done', 'Comment']...}のような辞書を作る
+        # 'Done', 'Yet' は各タスクが完了したかどうかを表す。 'Comment' はコメントの有無を表す
+        # あくまでカレンダー上に表示するだけなので、その日のタスク・コメントの有無、完了確認だけ取得できれば良い
         day_tasks = {day: [] for week in days for day in week}
 
         for task in queryset:
@@ -106,7 +107,7 @@ class MonthWithTaskMixin(MonthCalendarMixin):
         for comment in comment_qs:
             day_tasks[comment.created_at].append('Comment')
 
-        # day_tasks辞書を、週毎に分割する。[{1日: 1日のタスク...}, {8日: 8日のタスク...}, ...]
+        # day_tasks辞書を、週毎に分割する。[{1日: ['Done', 'Yet', 'Comment']}... {8日: ['Done', 'Comment']...}, ...]
         # 7個ずつ取り出して分割しています。
         size = len(day_tasks)
         return [{key: day_tasks[key] for key in itertools.islice(day_tasks, i, i + 7)} for i in range(0, size, 7)]
