@@ -56,7 +56,7 @@
                 <i class="bi bi-x-circle-fill"> </i>
               </a>
             </li>
-            {% empty %}
+          {% empty %}
             <p class="text-center">
               {% if the_day > today %}
                 この日はまだ予定がありません 😌
@@ -76,10 +76,8 @@
               {% csrf_token %}
               <div class="card-header">
                 <div class="d-flex justify-content-between">
-                  <div class="col">
-                    この日の感想など
-                  </div>
-                    <a class="" id="edit-comment"><span class="badge rounded-pill bg-danger">編集する</span></a>
+                  <div class="col"><i class="bi bi-chat"></i> この日の感想など</div>
+                  <a class="" id="edit-comment"><span class="badge rounded-pill bg-secondary">編集する</span></a>
                 </div>
               </div>
 
@@ -88,7 +86,7 @@
               </div>
 
               <div class="card-body comment-edit" style="display: none">
-                {{ cform.body|attr:'class:form-control comment_form'|attr:'placeholder:コメント' }}
+                {{ comment_form.body|attr:'class:form-control comment_form'|attr:'placeholder:コメント' }}
                 <input type="submit" value="コメントを変更" class="btn btn-sm btn-primary">
                 <a class="btn btn-secondary btn-sm" id="cancel-comment">キャンセル</a>
                 <a class="btn btn-danger btn-sm"
@@ -100,7 +98,7 @@
             <div class="card-header"><i class="bi bi-chat"></i> この日の感想などをコメントとして残すことが出来ます</div>
             <form method="post" class="m-3">
               {% csrf_token %}
-              {{ cform.body|attr:'class:form-control comment_form'|attr:'placeholder:コメント' }}
+              {{ comment_form.body|attr:'class:form-control comment_form'|attr:'placeholder:コメント' }}
               <input type="submit" value="コメントを追加" class="btn btn-sm btn-primary">
             </form>
           {% endif %}
@@ -220,6 +218,15 @@
     // --------------------------------------------
     // タスク完了処理
     // --------------------------------------------
+    addEventListener('DOMContentLoaded', function () {
+      for (let i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+          btns[i].style = 'display:none'
+        } else {
+          btns[i].style = 'display:inline-block'
+        }
+      }
+    })
     const checkboxes = document.querySelectorAll("input[type='checkbox']")
     for (let i = 0; i < checkboxes.length; i++) {
 
@@ -235,9 +242,11 @@
         if (checkboxes[i].checked) {
           url += 'true/'
           task_title.classList.add('done')
+          btns[i].style = 'display:none'
         } else {
           url += 'false/'
           task_title.classList.remove('done')
+          btns[i].style = 'display:inline-block'
         }
 
         fetch(url, {
@@ -247,7 +256,7 @@
             'X-CSRFToken': csrftoken,
           }
         }).then(res => {
-          console.log(res)
+          console.log(res.data)
         }).catch(err => {
           console.log(err)
         })

@@ -67,9 +67,9 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
 
             # コメントが存在すれば編集モードに
             if comment:
-                cform = AddCommentForm(request.POST or None, instance=comment)
+                comment_form = AddCommentForm(request.POST or None, instance=comment)
             else:
-                cform = AddCommentForm(request.POST or None)
+                comment_form = AddCommentForm(request.POST or None)
 
             if request.method == 'POST':
                 # タスクフォーム処理開始
@@ -84,15 +84,15 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
                     form.save()
 
                 # コメントフォーム処理開始
-                if cform.is_valid():
-                    cform = cform.save(commit=False)
-                    cform.created_by = request.user
+                if comment_form.is_valid():
+                    comment_form = comment_form.save(commit=False)
+                    comment_form.created_by = request.user
 
                     # 今日以外では「選択されている日」をタスクの作成日に入れる
                     if today != the_day:
-                        cform.created_at = the_day
+                        comment_form.created_at = the_day
 
-                    cform.save()
+                    comment_form.save()
 
                 return redirect('task:day', kwargs['year'], kwargs['month'], kwargs['day'])
 
@@ -107,7 +107,7 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
                 'yesterday': yesterday,
                 'tomorrow': tomorrow,
                 'the_day': the_day,
-                'cform': cform,
+                'comment_form': comment_form,
                 'comment': comment,
             }
 
@@ -123,16 +123,10 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
 
 @login_required
 def delete_comment(request, year, month, day):
-    today = datetime.date.today()
-
-    # 日付のパラメータが無い時は今日を表示（トップページ）
-    if year is None:
-        year = today.year
-        month = today.month
-        day = today.day
+    """コメントをGETアクセスから削除します"""
 
     the_day = datetime.date(year, month, day)
-    comment = Comment.objects.get(created_by=request.user, created_at=the_day)
+    comment = get_object_or_404(Comment, created_by=request.user, created_at=the_day)
 
     comment.delete()
     return redirect('task:day', year, month, day)

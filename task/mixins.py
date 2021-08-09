@@ -104,11 +104,8 @@ class MonthWithTaskMixin(MonthCalendarMixin):
             day_tasks[task_date].append(task_status)
 
         for comment in comment_qs:
-            comment_date = comment.created_at
-            day_tasks[comment_date].append('Comment')
+            day_tasks[comment.created_at].append('Comment')
 
-
-        print(day_tasks)
         # day_tasks辞書を、週毎に分割する。[{1日: 1日のタスク...}, {8日: 8日のタスク...}, ...]
         # 7個ずつ取り出して分割しています。
         size = len(day_tasks)
