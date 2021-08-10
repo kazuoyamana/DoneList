@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% load static %}
+
+{% block content %}
+
+  <div class="container mypage">
+    <div class="row justify-content-center">
+      <div class="col-md-7">
+
+        {% if messages %}
+          {% for message in messages %}
+            {% bootstrap_messages %}
+          {% endfor %}
+        {% endif %}
+
+        <h2 class="my-5">マイページ</h2>
+
+        {% if user.profile.avatar %}
+          <img src="{{ user.profile.avatar.url }}" alt="" class="avatar">
+        {% else %}
+          <img src="{% static 'img/avatar.png' %}" alt="" class="avatar">
+        {% endif %}
+
+        <table class="table">
+          <tr>
+            <th>ユーザー名</th>
+            <td>{{ user.username }}</td>
+          </tr>
+          <tr>
+            <th>メールアドレス</th>
+            <td>{% if user.email %}{{ user.email }}{% else %}未設定{% endif %}</td>
+          </tr>
+          <tr>
+            <th>ニックネーム</th>
+            <td>{% if user.profile.nickname %}{{ user.profile.nickname }}{% else %}未設定{% endif %}</td>
+          </tr>
+          <tr>
+            <th>自己紹介</th>
+            <td>{% if user.profile.bio %}{{ user.profile.bio }}{% else %}未設定{% endif %}</td>
+          </tr>
+
+        </table>
+
+        <p class="text-center"><a href="{% url 'account:edit' %}" class="btn btn-primary">プロフィールを編集する</a></p>
+
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

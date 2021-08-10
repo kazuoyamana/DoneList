@@ -33,6 +33,12 @@
       <ul class="navbar-nav">
         {% if user.is_authenticated %}
           <li class="nav-item">
+            <a class="nav-link" href="/">ホーム</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'account:profile' %}">マイページ</a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="{% url 'logout' %}">ログアウト</a>
           </li>
         {% else %}
