@@ -2,6 +2,8 @@
 {% load django_bootstrap5 %}
 {% load static %}
 
+{% block title %}マイページ{% endblock %}
+
 {% block content %}
 
   <div class="container mypage">
@@ -37,7 +39,7 @@
           </tr>
           <tr>
             <th>自己紹介</th>
-            <td>{% if user.profile.bio %}{{ user.profile.bio }}{% else %}未設定{% endif %}</td>
+            <td>{% if user.profile.bio %}{{ user.profile.bio|linebreaksbr }}{% else %}未設定{% endif %}</td>
           </tr>
 
         </table>

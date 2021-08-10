@@ -9,7 +9,7 @@ class UserCreateForm(UserCreationForm):
 
 
 class UserEditForm(UserChangeForm):
-    # 自動で表示されるパスワードフィールドを消すため
+    # 自動で表示されるパスワードフィールドを消す
     password = None
 
     class Meta:
