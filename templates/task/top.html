@@ -12,13 +12,10 @@
     <div class="row justify-content-xl-between justify-content-center py-4">
 
       {% if messages %}
-        <ul class="messages">
-          {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-          {% endfor %}
-        </ul>
+        {% for message in messages %}
+          {% bootstrap_messages %}
+        {% endfor %}
       {% endif %}
-      {% bootstrap_messages %}
 
       <div class="col-lg-8 col-md-10 col-xl-7">
 
@@ -281,11 +278,14 @@
 
     commentBtns = [editBtn, cancelBtn]
 
-    for (let i = 0; i < commentBtns.length; i++) {
-      commentBtns[i].addEventListener('click', function () {
-        changeDisplay(commentNormal)
-        changeDisplay(commentEdit)
-      })
+    // ボタンが取得できる時（コメントが存在する時）だけイベント
+    if(editBtn) {
+      for (let i = 0; i < commentBtns.length; i++) {
+        commentBtns[i].addEventListener('click', function () {
+          changeDisplay(commentNormal)
+          changeDisplay(commentEdit)
+        })
+      }
     }
 
 
