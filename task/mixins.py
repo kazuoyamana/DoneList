@@ -91,7 +91,7 @@ class MonthWithTaskMixin(MonthCalendarMixin):
 
         # {1日のdatetime: ['Done', 'Yet', 'Yet', 'Comment'], 2日のdatetime: ['Done', 'Comment']...}のような辞書を作る
         # 'Done', 'Yet' は各タスクが完了したかどうかを表す。 'Comment' はコメントの有無を表す
-        # あくまでカレンダー上に表示するだけなので、その日のタスク・コメントの有無、完了確認だけ取得できれば良い
+        # カレンダー上に表示するだけなので、その日のタスク・コメントの有無、完了確認だけ取得できれば良い
         day_tasks = {day: [] for week in days for day in week}
 
         for task in queryset:

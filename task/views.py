@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.views import generic
+from django.contrib.auth.models import User
 
 from . import mixins
 from .models import Task, Comment
@@ -43,8 +44,13 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
     model = Task
     date_field = 'created_at'
 
-    def dispatch(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
+        pass
 
+    def post(self, request, *args, **kwargs):
+        pass
+
+    def dispatch(self, request, *args, **kwargs):
         today = datetime.date.today()
 
         # 日付のパラメータが無い時（トップページ）は今日を表示
@@ -56,6 +62,10 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
         the_day = datetime.date(kwargs['year'], kwargs['month'], kwargs['day'])
 
         if request.user.is_authenticated:
+            # 週の始まり設定 True : 日曜日   False : 月曜日
+            if request.user.week_status:
+                self.first_weekday = 6
+
             tasks = Task.objects.filter(created_by=request.user, created_at=the_day)
             form = AddTaskForm(request.POST or None)
 

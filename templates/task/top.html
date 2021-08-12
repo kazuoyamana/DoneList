@@ -9,7 +9,7 @@
 
   <div class="container">
 
-    <div class="row justify-content-xl-between justify-content-center py-4">
+    <div class="row justify-content-center py-4">
 
       {% if messages %}
         {% for message in messages %}
@@ -17,9 +17,9 @@
         {% endfor %}
       {% endif %}
 
-      <div class="col-lg-8 col-md-10 col-xl-7">
+      <div class="col-lg-6 col-md-10 col-xl-6 g-5">
 
-        <div class="row justify-content-between my-3">
+        <div class="row justify-content-center my-3">
           <div class="prev col-3"><a href="{% url 'task:day' yesterday.year yesterday.month yesterday.day %}">
             <i class="bi bi-arrow-left-short"></i> 前日</a>
           </div>
@@ -106,9 +106,9 @@
       </div>
 
 
-      <div class="col-lg-8 col-md-10 col-xl-4">
+      <div class="col-lg-4 col-md-10 col-xl-4">
 
-        <div class="row justify-content-between my-3">
+        <div class="row justify-content-between my-3 g-5">
           <div class="prev col-3"><a href="{% url 'task:day' month_previous.year month_previous.month the_day.day %}">
             <i class="bi bi-arrow-left-short"></i> 前月</a>
           </div>
@@ -155,7 +155,7 @@
               {% else %}<span>
               {% endif %}
               {#  コメントの存在確認  #}
-              {% if 'Comment' in tasks %}<i class="bi bi-chat"></i>{% endif %}
+              {% if 'Comment' in tasks %}<i class="bi bi-chat-text"></i>{% endif %}
               <a href="{% url 'task:day' day.year day.month day.day %}">{{ day.day }}</a>
               </span>
 
