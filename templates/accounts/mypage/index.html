@@ -18,28 +18,32 @@
 
         <h2 class="my-5">マイページ</h2>
 
-        {% if user.profile.avatar %}
-          <img src="{{ user.profile.avatar.url }}" alt="" class="avatar">
+        {% if user.avatar %}
+          <img src="{{ user.avatar.url }}" alt="" class="avatar">
         {% else %}
           <img src="{% static 'img/avatar.png' %}" alt="" class="avatar">
         {% endif %}
 
-        <table class="table">
+        <table class="table table-striped">
           <tr>
             <th>ユーザー名</th>
-            <td>{{ user.username }}</td>
+            <td>{% if user.username %}{{ user.username }}{% else %}未設定{% endif %}</td>
           </tr>
           <tr>
             <th>メールアドレス</th>
             <td>{% if user.email %}{{ user.email }}{% else %}未設定{% endif %}</td>
           </tr>
           <tr>
-            <th>ニックネーム</th>
-            <td>{% if user.profile.nickname %}{{ user.profile.nickname }}{% else %}未設定{% endif %}</td>
+            <th>URL</th>
+            <td>{% if user.profile.website %}{{ user.profile.website }}{% else %}未設定{% endif %}</td>
           </tr>
           <tr>
             <th>自己紹介</th>
             <td>{% if user.profile.bio %}{{ user.profile.bio|linebreaksbr }}{% else %}未設定{% endif %}</td>
+          </tr>
+          <tr>
+            <th>週の始まり</th>
+            <td>{% if user.week_status %}日曜始まり{% else %}月曜始まり{% endif %}</td>
           </tr>
 
         </table>
