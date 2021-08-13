@@ -72,4 +72,7 @@ def profile_edit_view(request):
     return render(request, 'accounts/mypage/edit.html', context)
 
 
-
+def guest_login(request):
+    guest_user = User.objects.get(email='guest@guest.com')
+    login(request, guest_user)
+    return redirect('task:top')

@@ -98,7 +98,7 @@ class Profile(models.Model):
     ここにはあまりアクセスのない項目を追加する
     """
     bio = models.TextField('自己紹介', max_length=1000, blank=True)
-    website = models.URLField('URL', max_length=500, help_text='ホームページURLを入力してください')
+    website = models.URLField('URL', max_length=500, help_text='ホームページURLを入力してください', blank=True)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     class Meta:

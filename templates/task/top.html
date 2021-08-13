@@ -6,10 +6,14 @@
 {% block title %}{{ the_day|date }}{% endblock %}
 
 {% block content %}
-
+  <div class="py-2 text-center" style="border-bottom: 1px solid #ccc">
+        <strong>{{ user.username }}</strong>さんのホーム画面
+  </div>
   <div class="container">
 
-    <div class="row justify-content-center py-4">
+
+
+    <div class="row justify-content-center pt-0">
 
       {% if messages %}
         {% for message in messages %}
