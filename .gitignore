@@ -1,2 +1,9 @@
 /config/settings/.env
-/static/css
+/config/settings/local.py
+/static/css/
+*.log
+*.pot
+*.pyc
+__pycache__/
+db.sqlite3
+media
