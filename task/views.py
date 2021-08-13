@@ -144,6 +144,6 @@ def delete_comment(request, year, month, day):
 
 @login_required
 def completed_task_view(request):
-    """完了済みタスクの一覧を表示します"""
+    """完了済みタスクの一覧を表示します """
     done_tasks = Task.objects.filter(done_at__isnull=False, created_by=request.user)
     return render(request, 'task/completed.html', {'done_tasks': done_tasks})
