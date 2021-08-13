@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import task_delete, task_done, TopView, delete_comment
+from .views import task_delete, task_done, TopView, delete_comment, completed_task_view
 
 app_name = 'task'
 
@@ -9,4 +9,5 @@ urlpatterns = [
     path('delete/<int:task_id>/', task_delete, name='delete'),
     path('done/<int:task_id>/<str:status>/', task_done, name='done'),
     path('delete_co/<int:year>/<int:month>/<int:day>/', delete_comment, name='delete_co'),
+    path('completed/', completed_task_view, name='completed'),
 ]

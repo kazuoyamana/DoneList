@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}完了済みタスク一覧{% endblock %}
+
+{% block content %}
+
+  <div class="container py-5" style="text-align: center">
+      <h2>完了済みタスク</h2>
+    <div class="col-md-7 mt-5" style="margin: auto; text-align: left">
+
+      <table class="table">
+
+        <thead>
+        <tr>
+          <th>タスクタイトル</th>
+          <th>完了日</th>
+        </tr>
+        </thead>
+
+        {% for task in done_tasks %}
+          <tr>
+            <td>{{ task.title }}</td>
+            <td>{{ task.done_at }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="2">まだ完了済みのタスクはありません。</td>
+          </tr>
+        {% endfor %}
+
+      </table>
+
+
+    </div>
+  </div>
+{% endblock %}
