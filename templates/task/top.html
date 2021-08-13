@@ -6,12 +6,13 @@
 {% block title %}{{ the_day|date }}{% endblock %}
 
 {% block content %}
-  <div class="py-2 text-center" style="border-bottom: 1px solid #ccc">
-        <strong>{{ user.username }}</strong>さんのホーム画面
-  </div>
+  {% if user.username %}
+    <div class="py-2 text-center" style="border-bottom: 1px solid #ccc">
+      <strong>{{ user.username }}</strong>さんのホーム画面
+    </div>
+  {% endif %}
+
   <div class="container">
-
-
 
     <div class="row justify-content-center pt-0">
 
@@ -105,7 +106,7 @@
           {% endif %}
 
         </div>
-
+      <p class="text-end"><a href="{% url 'task:completed' %}">完了済みタスク</a></p>
 
       </div>
 
@@ -281,7 +282,7 @@
     commentBtns = [editBtn, cancelBtn]
 
     // ボタンが取得できる時（コメントが存在する時）だけイベント
-    if(editBtn) {
+    if (editBtn) {
       for (let i = 0; i < commentBtns.length; i++) {
         commentBtns[i].addEventListener('click', function () {
           changeDisplay(commentNormal)
