@@ -22,25 +22,17 @@
   </div>
 
   <script>
-    // prop function like jquery
-    let prop = function (node, name, value) {
-      if (typeof value === 'undefined') {
-        return node[name];
-      }
-      node[name] = value;
-    };
-
     addEventListener('load', () => {
-      let el = document.querySelector("input[name='avatar']")
+      const el = document.querySelector("input[name='avatar']")
 
       let avatarUrl = ''
 
       // nextSiblingがTrue ＝ 画像が設定済みの場合
-      if(el.nextSibling) {
+      if (el.nextSibling) {
         avatarUrl = el.nextSibling.nextSibling.firstElementChild.lastElementChild.getAttribute('href')
         // 画像直リンクURLを非表示に
         el.nextSibling.nextSibling.firstElementChild.style.display = 'none'
-      }else {
+      } else {
         avatarUrl = '{% static 'img/avatar.png' %}'
       }
 
@@ -51,11 +43,11 @@
       el.style.margin = 'auto'
 
       // アップロード画像セットでinputの背景も変更
-      el.addEventListener('change',function () {
-        let upFileName = prop(this, 'files')[0].name
+      el.addEventListener('change', function () {
+        const uploadedFilename = this.files[0].name
         {# uploadsはモデルで設定した ImageField の upload_to と同じにすること #}
-        const upFileUrl =  `{% get_media_prefix %}uploads/${upFileName}`
-        el.style.background = `url(${upFileUrl}) no-repeat center / cover`
+        const uploadedFileUrl = `{% get_media_prefix %}uploads/${uploadedFilename}`
+        el.style.background = `url(${uploadedFileUrl}) no-repeat center / cover`
       })
     })
   </script>
