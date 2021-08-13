@@ -21,7 +21,7 @@ def task_delete(request, task_id):
         task.delete()
         return redirect('task:top')
     else:
-        return HttpResponse("<h1>You can't delete task that belongs to someone else.😅</h1>")
+        return HttpResponse("<h1>You can't delete a task this way.😅</h1>")
 
 
 @csrf_protect
@@ -142,4 +142,8 @@ def delete_comment(request, year, month, day):
     return redirect('task:day', year, month, day)
 
 
-
+@login_required
+def completed_task_view(request):
+    done_tasks = Task.objects.filter(done_at__isnull=False, created_by=request.user)
+    print(done_tasks)
+    return render(request, 'task/completed.html', {'done_tasks': done_tasks})
