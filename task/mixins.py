@@ -3,7 +3,7 @@ import datetime
 import itertools
 from collections import deque
 
-from .models import Comment
+from .models import Task, Comment
 
 
 class BaseCalendarMixin:
@@ -111,6 +111,95 @@ class MonthWithTaskMixin(MonthCalendarMixin):
         # 7個ずつ取り出して分割しています。
         size = len(day_tasks)
         return [{key: day_tasks[key] for key in itertools.islice(day_tasks, i, i + 7)} for i in range(0, size, 7)]
+
+    def get_consecutive_days(self):
+        """連続したタスク完了日を返す
+
+        作成日と完了日からタスクが連続して完了している日を算出する。
+
+        Returns:
+            list[dict]
+        """
+
+        # 完了したタスクのある日だけ取得（Values_list(flat=True）で取得したリストをset化）
+        done_dates = set(
+            Task.objects.filter(done_at__isnull=False, created_by=self.request.user)
+                .values_list('created_at', flat=True)
+        )
+        # 未完了タスクのある日だけ取得
+        not_done_dates = set(
+            Task.objects.filter(done_at__isnull=True, created_by=self.request.user)
+                .values_list('created_at', flat=True)
+        )
+
+        # ２つのセットの差集合からすべて終わっている日付setを作る
+        all_done_dates = done_dates - not_done_dates
+        # list化してsort
+        sorted_dates = sorted(list(all_done_dates))
+
+        result = []
+        cur_dic = None
+        for i, cur_date in enumerate(sorted_dates):
+            if i == 0:
+                cur_dic = dict(
+                    start_date=cur_date,
+                    end_date=cur_date,
+                    continuous_days=1
+                )
+                continue
+            if cur_date - datetime.timedelta(days=1) == sorted_dates[i - 1]:
+                # 連続
+                cur_dic['end_date'] = cur_date
+                cur_dic['continuous_days'] += 1
+            else:
+                # 途切れた
+                result.append(cur_dic)
+                cur_dic = dict(
+                    start_date=cur_date,
+                    end_date=cur_date,
+                    continuous_days=1
+                )
+        # 最後のcur_dicを追加
+        result.append(cur_dic)
+
+        return result
+
+    def get_best_consecutive(self):
+        """get_consecutive_days()から取得したデータをもとに、
+        最高継続記録と現在継続中の記録を返す
+
+        Returns:
+            dict
+        """
+
+        today = datetime.date.today()
+
+        consecutive_days = self.get_consecutive_days()
+        # print(consecutive_days)
+
+        # タスクがない場合は処理から抜ける
+        if consecutive_days == [None]:
+            return
+
+        # 最新の連続記録最終日を取得
+        cur_con_last = consecutive_days[-1]['end_date']
+
+        # current_consecutive_day = None
+
+        # 最新の連続記録が、昨日・今日まで続いてたら現在継続中にする
+        if cur_con_last == today - datetime.timedelta(days=1) or cur_con_last == today:
+            current_consecutive_day = consecutive_days[-1]['continuous_days']
+        else:
+            current_consecutive_day = 0
+
+        most_consecutive_days = []
+        for day in consecutive_days:
+            most_consecutive_days.append(day['continuous_days'])
+
+        return {
+            'current_consecutive_day': current_consecutive_day,
+            'most_consecutive_days': max(most_consecutive_days)
+        }
 
     def get_month_calendar(self):
         calendar_context = super().get_month_calendar()

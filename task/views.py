@@ -6,7 +6,6 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth.decorators import login_required
 from django.views import generic
-from django.contrib.auth.models import User
 
 from . import mixins
 from .models import Task, Comment
@@ -44,13 +43,8 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
     model = Task
     date_field = 'created_at'
 
-    def get(self, request, *args, **kwargs):
-        pass
-
-    def post(self, request, *args, **kwargs):
-        pass
-
     def dispatch(self, request, *args, **kwargs):
+
         today = datetime.date.today()
 
         # 日付のパラメータが無い時（トップページ）は今日を表示
@@ -98,7 +92,7 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
                     comment_form = comment_form.save(commit=False)
                     comment_form.created_by = request.user
 
-                    # 今日以外では「選択されている日」をタスクの作成日に入れる
+                    # 今日以外では「選択されている日」をコメントの作成日に入れる
                     if today != the_day:
                         comment_form.created_at = the_day
 
@@ -119,6 +113,7 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
                 'the_day': the_day,
                 'comment_form': comment_form,
                 'comment': comment,
+                'consecutive': self.get_best_consecutive(),
             }
 
             context = super().get_context_data(**kwargs)
@@ -133,7 +128,7 @@ class TopView(mixins.MonthWithTaskMixin, generic.TemplateView):
 
 @login_required
 def delete_comment(request, year, month, day):
-    """コメントをGETアクセスから削除します"""
+    """コメントをGETアクセスから削除"""
 
     the_day = datetime.date(year, month, day)
     comment = get_object_or_404(Comment, created_by=request.user, created_at=the_day)
@@ -144,6 +139,7 @@ def delete_comment(request, year, month, day):
 
 @login_required
 def completed_task_view(request):
-    """完了済みタスクの一覧を表示します """
+    """完了済みタスクの一覧を表示"""
+
     done_tasks = Task.objects.filter(done_at__isnull=False, created_by=request.user)
     return render(request, 'task/completed.html', {'done_tasks': done_tasks})
