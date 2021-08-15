@@ -171,7 +171,6 @@ class MonthWithTaskMixin(MonthCalendarMixin):
         Returns:
             dict
         """
-
         today = datetime.date.today()
 
         consecutive_days = self.get_consecutive_days()
@@ -184,21 +183,20 @@ class MonthWithTaskMixin(MonthCalendarMixin):
         # 最新の連続記録最終日を取得
         cur_con_last = consecutive_days[-1]['end_date']
 
-        # current_consecutive_day = None
-
         # 最新の連続記録が、昨日・今日まで続いてたら現在継続中にする
         if cur_con_last == today - datetime.timedelta(days=1) or cur_con_last == today:
             current_consecutive_day = consecutive_days[-1]['continuous_days']
         else:
             current_consecutive_day = 0
 
+        # 全期間で最大の継続日数を取得
         most_consecutive_days = []
         for day in consecutive_days:
             most_consecutive_days.append(day['continuous_days'])
 
         return {
             'current_consecutive_day': current_consecutive_day,
-            'most_consecutive_days': max(most_consecutive_days)
+            'most_consecutive_day': max(most_consecutive_days)
         }
 
     def get_month_calendar(self):
