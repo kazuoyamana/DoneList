@@ -12,8 +12,8 @@
       {% if user.username %}
         <div class="col-md"><strong>{{ user.username }}</strong>さんのホーム画面</div>{% endif %}
       <div class="col-md">
-        {% if consecutive.most_consecutive_days %}
-          <span class="badge bg-danger"> ベスト : {{ consecutive.most_consecutive_days }}日継続</span>{% endif %}
+        {% if consecutive.most_consecutive_day %}
+          <span class="badge bg-danger"> ベスト : {{ consecutive.most_consecutive_day }}日継続</span>{% endif %}
         {% if consecutive.current_consecutive_day %}
           <span class="badge bg-primary">現在 : {{ consecutive.current_consecutive_day }}日継続中</span>{% endif %}
       </div>
